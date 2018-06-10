@@ -107,6 +107,7 @@ set( fc_sources
      src/network/http/http_client.cpp
      src/compress/smaz.cpp
      src/compress/zlib.cpp
+     src/crypto/xxhash.c
      )
 
 file( GLOB_RECURSE fc_headers ${CMAKE_CURRENT_SOURCE_DIR} *.hpp *.h )
