@@ -120,7 +120,7 @@ set( sources
 #list(APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/git_revision.cpp")
 list(APPEND sources ${fc_headers})
 
-setup_library( fc SOURCES ${sources} LIBRARY_TYPE SHARED DONT_INSTALL_LIBRARY )
+setup_library( fc SOURCES ${sources} LIBRARY_TYPE DONT_INSTALL_LIBRARY )
   
 IF(APPLE)
   # As of 10.10 yosemite, the OpenSSL static libraries shipped with os x have a dependency
