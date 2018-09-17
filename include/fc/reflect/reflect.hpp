@@ -269,6 +269,37 @@ template<> struct reflector<TYPE> {\
     }; \
     FC_REFLECT_DERIVED_IMPL_INLINE( TYPE, INHERITS, MEMBERS ) \
 }; }
+
+#define FC_REFLECT_DERIVED_EX( TYPE, INHERITS, MEMBERS, MEMBERS_EX ) \
+namespace fc {  \
+  template<> struct get_typename<TYPE>  { static const char* name()  { return BOOST_PP_STRINGIZE(TYPE);  } }; \
+template<> struct reflector<TYPE> {\
+    typedef TYPE type; \
+    typedef fc::true_type  is_defined; \
+    typedef fc::false_type is_enum; \
+    template<typename Visitor> \
+    static auto verify_imp(const Visitor& v, int) -> decltype(v.reflector_verify(), void()) { \
+       v.reflector_verify(); \
+    } \
+    template<typename Visitor> \
+    static auto verify_imp(const Visitor& v, long) -> decltype(v, void()) {} \
+    template<typename Visitor> \
+    static auto verify(const Visitor& v) -> decltype(verify_imp(v, 0), void()) { \
+       verify_imp(v, 0); \
+    } \
+    enum  member_count_enum {  \
+      local_member_count = 0  BOOST_PP_SEQ_FOR_EACH( FC_REFLECT_MEMBER_COUNT, +, MEMBERS ),\
+      total_member_count = local_member_count BOOST_PP_SEQ_FOR_EACH( FC_REFLECT_BASE_MEMBER_COUNT, +, INHERITS )\
+    }; \
+template<typename Visitor>\
+static inline void visit( const Visitor& v ) { \
+    BOOST_PP_SEQ_FOR_EACH( FC_REFLECT_VISIT_BASE, v, INHERITS ) \
+    BOOST_PP_SEQ_FOR_EACH( FC_REFLECT_VISIT_MEMBER, v, MEMBERS ) \
+      verify( v ); \
+} \
+}; }
+
+
 #define FC_REFLECT_DERIVED_TEMPLATE( TEMPLATE_ARGS, TYPE, INHERITS, MEMBERS ) \
 namespace fc {  \
   template<BOOST_PP_SEQ_ENUM(TEMPLATE_ARGS)> struct get_typename<TYPE>  { static const char* name()  { return BOOST_PP_STRINGIZE(TYPE);  } }; \
@@ -305,6 +336,10 @@ template<BOOST_PP_SEQ_ENUM(TEMPLATE_ARGS)> struct reflector<TYPE> {\
  */
 #define FC_REFLECT( TYPE, MEMBERS ) \
     FC_REFLECT_DERIVED( TYPE, BOOST_PP_SEQ_NIL, MEMBERS )
+
+#define FC_REFLECT_EX( TYPE, MEMBERS, MEMBERS_EX ) \
+    FC_REFLECT_DERIVED_EX( TYPE, BOOST_PP_SEQ_NIL, MEMBERS, MEMBERS_EX )
+
 
 #define FC_REFLECT_TEMPLATE( TEMPLATE_ARGS, TYPE, MEMBERS ) \
     FC_REFLECT_DERIVED_TEMPLATE( TEMPLATE_ARGS, TYPE, BOOST_PP_SEQ_NIL, MEMBERS )
