@@ -319,12 +319,15 @@ namespace fc
 
 } // fc
 
+static struct exception_api* s_api = nullptr;
+
 typedef void (*fn_vm_api_throw_exception)(int type, const char* fmt, ...);
 
 fn_vm_api_throw_exception _vm_api_throw_exception = nullptr;
-
+#if 0
 void vm_api_throw_exception(int type, const char* fmt, ...) {
-   if (_vm_api_throw_exception) {
-      _vm_api_throw_exception(type, fmt);
+   if (s_api) {
+      s_api->throw_exception(type, fmt);
    }
 }
+#endif
