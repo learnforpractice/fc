@@ -318,3 +318,13 @@ namespace fc
    bool enable_record_assert_trip = false;
 
 } // fc
+
+typedef void (*fn_vm_api_throw_exception)(int type, const char* fmt, ...);
+
+fn_vm_api_throw_exception _vm_api_throw_exception = nullptr;
+
+void vm_api_throw_exception(int type, const char* fmt, ...) {
+   if (_vm_api_throw_exception) {
+      _vm_api_throw_exception(type, fmt);
+   }
+}

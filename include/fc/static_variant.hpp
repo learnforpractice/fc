@@ -115,27 +115,27 @@ struct storage_ops<N, T, Ts...> {
 template<int N>
 struct storage_ops<N> {
     static void del(int n, void *data) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid.");
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid.");
     }
     static void con(int n, void *data) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid." );
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid." );
     }
 
     template<typename visitor>
     static typename visitor::result_type apply(int n, void *data, visitor& v) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid." );
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid." );
     }
     template<typename visitor>
     static typename visitor::result_type apply(int n, void *data, const visitor& v) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid." );
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid." );
     }
     template<typename visitor>
     static typename visitor::result_type apply(int n, const void *data, visitor& v) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid." );
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid." );
     }
     template<typename visitor>
     static typename visitor::result_type apply(int n, const void *data, const visitor& v) {
-       FC_THROW_EXCEPTION( fc::assert_exception, "Internal error: static_variant tag is invalid." );
+       FC_THROW_EXCEPTION( assert_exception, "Internal error: static_variant tag is invalid." );
     }
 };
 
@@ -296,7 +296,7 @@ public:
             void* tmp(storage);
             return *reinterpret_cast<X*>(tmp);
         } else {
-            FC_THROW_EXCEPTION( fc::assert_exception, "static_variant does not contain a value of type ${t}", ("t",fc::get_typename<X>::name()) );
+            FC_THROW_EXCEPTION( assert_exception, "static_variant does not contain a value of type ${t}", ("t",fc::get_typename<X>::name()) );
            //     std::string("static_variant does not contain value of type ") + typeid(X).name()
            // );
         }
@@ -311,7 +311,7 @@ public:
             const void* tmp(storage);
             return *reinterpret_cast<const X*>(tmp);
         } else {
-            FC_THROW_EXCEPTION( fc::assert_exception, "static_variant does not contain a value of type ${t}", ("t",fc::get_typename<X>::name()) );
+            FC_THROW_EXCEPTION( assert_exception, "static_variant does not contain a value of type ${t}", ("t",fc::get_typename<X>::name()) );
         }
     }
     template<typename visitor>

@@ -92,16 +92,19 @@ namespace fc { namespace json_relaxed
            switch( q )
            {
                case '\'':
-                   if( strict )
-                       FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' at beginning of string, got '\''" );
+                   if( strict ) {
+                      FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' at beginning of string, got '\''" );
+                   }
                    // falls through
                case '"':
                    break;
                default:
-                   if( strict )
-                       FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' at beginning of string" );
-                   else
-                       FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' | '\\\'' at beginning of string" );
+                   if( strict ) {
+                      FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' at beginning of string" );
+                   }
+                   else {
+                      FC_THROW_EXCEPTION( parse_error_exception, "expected: '\"' | '\\\'' at beginning of string" );
+                   }
            }
            if( in.peek() == q )
            {
@@ -110,8 +113,9 @@ namespace fc { namespace json_relaxed
                    return std::string();
 
                // triple quote processing
-               if( strict )
-                   FC_THROW_EXCEPTION( parse_error_exception, "triple quote unsupported in strict mode" );
+               if( strict ) {
+                  FC_THROW_EXCEPTION( parse_error_exception, "triple quote unsupported in strict mode" );
+               }
                else
                {
                    in.get();
@@ -138,9 +142,10 @@ namespace fc { namespace json_relaxed
                            token << q;
                            continue;
                        }
-                       else if( c == '\x04' )
-                           FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOF in string '${token}'",
-                                      ("token", token.str() ) );
+                       else if( c == '\x04' ) {
+                          FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOF in string '${token}'",
+                                     ("token", token.str() ) );
+                       }
                        else if( allow_escape && (c == '\\') )
                            token << parseEscape( in );
                        else
@@ -165,14 +170,16 @@ namespace fc { namespace json_relaxed
                    in.get();
                    return token.str();
                }
-               else if( c == '\x04' )
-                   FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOF in string '${token}'",
-                              ("token", token.str() ) );
+               else if( c == '\x04' ) {
+                  FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOF in string '${token}'",
+                        ("token", token.str() ) );
+               }
                else if( allow_escape && (c == '\\') )
                    token << parseEscape( in );
-               else if( (c == '\r') | (c == '\n') )
-                   FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOL in string '${token}'",
-                              ("token", token.str() ) );
+               else if( (c == '\r') | (c == '\n') ) {
+                  FC_THROW_EXCEPTION( parse_error_exception, "unexpected EOL in string '${token}'",
+                             ("token", token.str() ) );
+               }
                else
                {
                    in.get();

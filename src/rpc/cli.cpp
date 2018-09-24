@@ -200,7 +200,7 @@ void cli::getline( const fc::string& prompt, fc::string& line)
          std::cout.flush(); //readline doesn't use cin, so we must manually flush _out
          line_read = readline(prompt.c_str());
          if( line_read == nullptr )
-            FC_THROW_EXCEPTION( fc::eof_exception, "" );
+            FC_THROW_EXCEPTION( eof_exception, "" );
          rl_bind_key( '\t', rl_complete );
          if( *line_read )
             add_history(line_read);
