@@ -14,10 +14,10 @@ target_include_directories(secp256k1
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/upstream/src
         ${CMAKE_CURRENT_SOURCE_DIR}
-        ${GMP_INCLUDE_DIR}
+        ${MPIR_INCLUDE_DIR}
 )
 
 target_compile_definitions(secp256k1 PRIVATE HAVE_CONFIG_H=1)
 target_compile_options(secp256k1 PRIVATE -fPIC)
 
-target_link_libraries(secp256k1)
+target_link_libraries(secp256k1 ${MPIR_LIBRARY})

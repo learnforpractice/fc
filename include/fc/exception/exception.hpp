@@ -11,7 +11,7 @@
 #include <boost/core/typeinfo.hpp>
 #include <boost/interprocess/exceptions.hpp>
 
-[[ noreturn ]] void vm_api_throw_exception(int type, const char* fmt, ...);
+//[[ noreturn ]] void vm_api_throw_exception(int type, const char* fmt, ...);
 
 namespace fc
 {
