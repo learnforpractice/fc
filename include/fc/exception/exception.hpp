@@ -575,7 +575,7 @@ namespace fc
  *  @param EXCEPTION a class in the Phoenix::Athena::API namespace that inherits
  *  @param format - a const char* string with "${keys}"
  */
-#if 0
+#ifndef USE_VM_API
 
 #define FC_THROW_EXCEPTION( EXCEPTION, FORMAT, ... ) \
   FC_MULTILINE_MACRO_BEGIN \
