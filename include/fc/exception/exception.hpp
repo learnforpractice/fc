@@ -11,7 +11,7 @@
 #include <boost/core/typeinfo.hpp>
 #include <boost/interprocess/exceptions.hpp>
 
-//[[ noreturn ]] void vm_api_throw_exception(int type, const char* fmt, ...);
+[[ noreturn ]] void vm_api_throw_exception(int type, const char* fmt, ...);
 
 namespace fc
 {
@@ -575,7 +575,7 @@ namespace fc
  *  @param EXCEPTION a class in the Phoenix::Athena::API namespace that inherits
  *  @param format - a const char* string with "${keys}"
  */
-#ifndef USE_VM_API
+#if 0
 
 #define FC_THROW_EXCEPTION( EXCEPTION, FORMAT, ... ) \
   FC_MULTILINE_MACRO_BEGIN \
