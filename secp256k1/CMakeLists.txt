@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.4)
 project(secp256k1)
 
-find_package(GMP REQUIRED)
+#find_package(GMP REQUIRED)
 
 add_library(secp256k1 STATIC
   upstream/src/secp256k1.c
@@ -21,6 +21,8 @@ target_compile_definitions(secp256k1 PRIVATE HAVE_CONFIG_H=1)
 target_compile_options(secp256k1 PRIVATE -fPIC)
 
 target_link_libraries(secp256k1 ${GMP_LIBRARIES})
+#target_link_libraries(secp256k1 ${GMP_LIBRARIES})
+
 install( TARGETS secp256k1 
    RUNTIME DESTINATION ${CMAKE_INSTALL_FULL_BINDIR}
    LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}
