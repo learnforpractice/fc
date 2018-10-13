@@ -38,6 +38,8 @@ namespace fc
             log_messages    _elog;
       };
    }
+
+   exception* exception::current_exception = nullptr;
    exception::exception( log_messages&& msgs, int64_t code,
                                     const std::string& name_value,
                                     const std::string& what_value )
@@ -47,6 +49,7 @@ namespace fc
       my->_what = what_value;
       my->_name = name_value;
       my->_elog = fc::move(msgs);
+      current_exception = this;
    }
 
    exception::exception(
@@ -60,6 +63,7 @@ namespace fc
       my->_what = what_value;
       my->_name = name_value;
       my->_elog = msgs;
+      current_exception = this;
    }
 
    unhandled_exception::unhandled_exception( log_message&& m, std::exception_ptr e )
@@ -98,6 +102,7 @@ namespace fc
       my->_code = code;
       my->_what = what_value;
       my->_name = name_value;
+      current_exception = this;
    }
 
    exception::exception( log_message&& msg,
@@ -110,18 +115,25 @@ namespace fc
       my->_what = what_value;
       my->_name = name_value;
       my->_elog.push_back( fc::move( msg ) );
+      current_exception = this;
    }
    exception::exception( const exception& c )
    :my( new detail::exception_impl(*c.my) )
-   { }
+   {
+      current_exception = this;
+   }
    exception::exception( exception&& c )
-   :my( fc::move(c.my) ){}
+   :my( fc::move(c.my) ){
+      current_exception = this;
+   }
 
    const char*  exception::name()const throw() { return my->_name.c_str(); }
    const char*  exception::what()const throw() { return my->_what.c_str(); }
    int64_t      exception::code()const throw() { return my->_code;         }
 
-   exception::~exception(){}
+   exception::~exception(){
+      current_exception = nullptr;
+   }
 
    void to_variant( const exception& e, variant& v )
    {

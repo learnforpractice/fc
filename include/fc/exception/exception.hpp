@@ -338,6 +338,7 @@ namespace fc
 
          exception& operator=( const exception& copy );
          exception& operator=( exception&& copy );
+         static exception* current_exception;
       protected:
          std::unique_ptr<detail::exception_impl> my;
    };
