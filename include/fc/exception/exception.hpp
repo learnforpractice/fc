@@ -222,6 +222,14 @@ namespace fc
       enum_db_api_exception,
       enum_arithmetic_exception,
       enum_abi_generation_exception,
+
+      enum_snapshot_exception,
+      enum_snapshot_validation_exception,
+      enum_snapshot_directory_not_found_exception,
+      enum_snapshot_exists_exception,
+
+      enum_explained_exception,
+      enum_localized_exception,
    };
 
    enum exception_code
