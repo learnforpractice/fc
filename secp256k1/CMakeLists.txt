@@ -5,8 +5,6 @@ project(secp256k1)
 
 add_library(secp256k1 STATIC
   upstream/src/secp256k1.c
-  field_5x52_int128_impl.cpp
-  scalar_4x64_impl.cpp
 )
 
 target_include_directories(secp256k1
