@@ -3,6 +3,7 @@
 #include <assert.h>
 
 
+
 namespace fc {
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -10,6 +11,14 @@ namespace fc {
 # pragma warning(disable:4522) /* multiple assignment operators */
 #endif
   bool assert_optional(bool is_valid ); // defined in exception.cpp
+
+#ifdef _MSC_VER
+typedef struct {
+  unsigned __int64 i[2];
+} int128_;
+
+#define __int128 __int64
+#endif
 
   /**
    *  @brief provides stack-based nullable value similar to boost::optional

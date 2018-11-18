@@ -103,7 +103,7 @@ namespace fc { namespace crypto {
 
          auto data_str = base58str.substr(pivot + 1);
          FC_ASSERT(!data_str.empty(), "Private Key has no data: ${str}", ("str", base58str));
-         return base58_str_parser<private_key::storage_type, config::private_key_prefix>::apply(data_str);
+         return base58_str_parser<private_key::storage_type>::apply(data_str);
       }
    }
 
@@ -120,8 +120,8 @@ namespace fc { namespace crypto {
          return to_wif(_storage.template get<default_type>());
       }
 
-      auto data_str = _storage.visit(base58str_visitor<storage_type, config::private_key_prefix>());
-      return std::string(config::private_key_base_prefix) + "_" + data_str;
+      auto data_str = _storage.visit(base58str_visitor<storage_type>());
+      return std::string(config::private_key_base_prefix) + data_str;
    }
 
    std::ostream& operator<<(std::ostream& s, const private_key& k) {

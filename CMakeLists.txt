@@ -34,9 +34,11 @@ MESSAGE(STATUS "Configuring fc to build on Unix/Apple")
 SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.so")
 
 IF(NOT APPLE)
- # Linux or other unix
- SET(rt_library rt )
- SET(pthread_library pthread)
+  IF(NOT WIN32)
+  # Linux or other unix
+  SET(rt_library rt )
+  SET(pthread_library pthread)
+  ENDIF(NOT WIN32)
 ENDIF(NOT APPLE)
 
 IF(NOT "$ENV{OPENSSL_ROOT_DIR}" STREQUAL "")
@@ -103,7 +105,7 @@ set( fc_sources
      src/network/resolve.cpp
      src/network/udp_socket.cpp
      src/network/url.cpp
-     src/network/http/http_client.cpp
+#     src/network/http/http_client.cpp
      src/compress/smaz.cpp
      src/compress/zlib.cpp
      src/crypto/xxhash.c
@@ -120,7 +122,7 @@ set( sources
 list(APPEND sources ${fc_headers})
 
 setup_library( fc SOURCES ${sources} LIBRARY_TYPE STATIC DONT_INSTALL_LIBRARY )
-  
+
 IF(APPLE)
   # As of 10.10 yosemite, the OpenSSL static libraries shipped with os x have a dependency
   # on zlib, so any time you link in openssl you also need to link zlib.  .  We really want to detect whether openssl was configured with the --no-zlib

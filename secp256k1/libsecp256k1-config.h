@@ -1,9 +1,17 @@
 #pragma once
 
 //optimizations that any compiler we target have
-#define HAVE_BUILTIN_CLZLL 1
-#define HAVE_BUILTIN_EXPECT 1
-#define HAVE___INT128 1
+
+#if defined (_MSC_VER)
+#else
+  #define HAVE_BUILTIN_CLZLL 1
+  #define HAVE_BUILTIN_EXPECT 1
+#endif
+
+#if defined (_MSC_VER)
+#else
+    #define HAVE___INT128 1
+#endif
 
 //use GMP for bignum
 #define HAVE_LIBGMP 1

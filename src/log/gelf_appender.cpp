@@ -117,8 +117,8 @@ namespace fc
     gelf_message["timestamp"] = time_ns / 1000000.;
     gelf_message["_timestamp_ns"] = time_ns;
 
-    static unsigned long gelf_log_counter;
-    gelf_message["_log_id"] = fc::to_string(++gelf_log_counter);
+    static unsigned long gelf_log_counter = 0;
+    gelf_message["_log_id"] = fc::to_string((int)++gelf_log_counter);
 
     switch (context.get_log_level())
     {

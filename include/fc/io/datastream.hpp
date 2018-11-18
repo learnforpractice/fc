@@ -90,7 +90,7 @@ class datastream<size_t> {
   private:
      size_t _size;
 };
-
+#if !defined(_MSC_VER)
 template<typename ST>
 inline datastream<ST>& operator<<(datastream<ST>& ds, const __int128& d) {
   ds.write( (const char*)&d, sizeof(d) );
@@ -114,6 +114,7 @@ inline datastream<ST>& operator>>(datastream<ST>& ds, unsigned __int128& d) {
   ds.read((char*)&d, sizeof(d) );
   return ds;
 }
+#endif
 
 template<typename ST>
 inline datastream<ST>& operator<<(datastream<ST>& ds, const int64_t& d) {
@@ -208,7 +209,8 @@ inline datastream<ST>& operator>>(datastream<ST>& ds, uint8_t& d) {
   ds.read((char*)&d, sizeof(d) );
   return ds;
 }
-/*
+
+#if !defined(_MSC_VER)
 template<typename ST, typename T>
 inline datastream<ST>& operator<<(datastream<ST>& ds, const boost::multiprecision::number<T>& n) {
    unsigned char data[(std::numeric_limits<decltype(n)>::digits+1)/8];
@@ -222,7 +224,7 @@ inline datastream<ST>& operator>>(datastream<ST>& ds, boost::multiprecision::num
    boost::multiprecision::export_bits( n, data, 1 );
    ds.write( (const char*)data, sizeof(data) );
 }
-*/
+#endif
 
 
 } // namespace fc

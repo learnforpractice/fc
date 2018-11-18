@@ -13,7 +13,7 @@ namespace fc
     }
 
     std::string to_base32( const char* data, size_t len )
-    { 
+    {
        auto s = cyoBase32EncodeGetLength(len);
        std::vector<char> b32;
        b32.resize(s);

@@ -5,12 +5,15 @@ project(secp256k1)
 
 add_library(secp256k1 STATIC
   upstream/src/secp256k1.c
+  field_5x52_int128_impl.cpp
+  scalar_4x64_impl.cpp
 )
 
 target_include_directories(secp256k1
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/upstream/
         ${CMAKE_CURRENT_SOURCE_DIR}/upstream/include
+        ${Boost_INCLUDE_DIR}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/upstream/src
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -18,6 +21,10 @@ target_include_directories(secp256k1
 )
 
 target_compile_definitions(secp256k1 PRIVATE HAVE_CONFIG_H=1)
-target_compile_options(secp256k1 PRIVATE -fPIC)
+
+IF(NOT WIN32 AND NOT APPLE)
+    target_compile_options(secp256k1 PRIVATE -fPIC)
+ENDIF(NOT WIN32)
 
 target_link_libraries(secp256k1 ${MPIR_LIBRARY})
+add_dependencies(secp256k1 mpir)

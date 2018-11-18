@@ -29,16 +29,20 @@ namespace fc { namespace crypto {
       return str.size() > prefix_len && str.substr(0, prefix_len).compare(prefix) == 0;
    }
 
-   template<typename, const char * const *, int, typename ...>
+   template<typename, int, typename ...>
    struct base58_str_parser_impl;
 
-   template<typename Result, const char * const * Prefixes, int Position, typename KeyType, typename ...Rem>
-   struct base58_str_parser_impl<Result, Prefixes, Position, KeyType, Rem...> {
+   template<typename Result, int Position, typename KeyType, typename ...Rem>
+   struct base58_str_parser_impl<Result, Position, KeyType, Rem...> {
       static Result apply(const std::string& prefix_str, const std::string& data_str)
       {
+        char* Prefixes[] = {
+            "K1",
+            "R1"
+        };
          using data_type = typename KeyType::data_type;
          using wrapper = checksummed_data<data_type>;
-         constexpr auto prefix = Prefixes[Position];
+         auto prefix = Prefixes[Position];
 
          if (prefix == prefix_str) {
             auto bin = fc::from_base58(data_str);
@@ -49,18 +53,18 @@ namespace fc { namespace crypto {
             return Result(KeyType(wrapped.data));
          }
 
-         return base58_str_parser_impl<Result, Prefixes, Position + 1, Rem...>::apply(prefix_str, data_str);
+         return base58_str_parser_impl<Result, Position + 1, Rem...>::apply(prefix_str, data_str);
       }
    };
 
-   template<typename Result, const char * const * Prefixes, int Position>
-   struct base58_str_parser_impl<Result, Prefixes, Position> {
+   template<typename Result, int Position>
+   struct base58_str_parser_impl<Result, Position> {
       static Result apply(const std::string& prefix_str, const std::string& data_str ) {
          FC_ASSERT(false, "No matching suite type for ${prefix}_${data}", ("prefix", prefix_str)("data",data_str));
       }
    };
 
-   template<typename, const char * const * Prefixes>
+   template<typename>
    struct base58_str_parser;
 
    /**
@@ -69,8 +73,8 @@ namespace fc { namespace crypto {
     * @param base58str
     * @return
     */
-   template<const char * const * Prefixes, typename ...Ts>
-   struct base58_str_parser<fc::static_variant<Ts...>, Prefixes> {
+   template<typename ...Ts>
+   struct base58_str_parser<fc::static_variant<Ts...>> {
       static fc::static_variant<Ts...> apply(const std::string& base58str) {
          const auto pivot = base58str.find('_');
          FC_ASSERT(pivot != std::string::npos, "No delimiter in data, cannot determine suite type: ${str}", ("str", base58str));
@@ -79,14 +83,20 @@ namespace fc { namespace crypto {
          auto data_str = base58str.substr(pivot + 1);
          FC_ASSERT(!data_str.empty(), "Data only has suite type prefix: ${str}", ("str", base58str));
 
-         return base58_str_parser_impl<fc::static_variant<Ts...>, Prefixes, 0, Ts...>::apply(prefix_str, data_str);
+         return base58_str_parser_impl<fc::static_variant<Ts...>, 0, Ts...>::apply(prefix_str, data_str);
       }
    };
 
-   template<typename Storage, const char * const * Prefixes, int DefaultPosition = -1>
+   template<typename Storage, int DefaultPosition = -1>
    struct base58str_visitor : public fc::visitor<std::string> {
       template< typename KeyType >
       std::string operator()( const KeyType& key ) const {
+          
+        char* Prefixes[] = {
+            "K1",
+            "R1"
+        };
+
          using data_type = typename KeyType::data_type;
          constexpr int position = Storage::template position<KeyType>();
          constexpr bool is_default = position == DefaultPosition;

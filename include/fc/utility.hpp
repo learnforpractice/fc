@@ -11,7 +11,6 @@
 #define NO_RETURN __attribute__((noreturn))
 #endif
 
-
 //namespace std {
 //  typedef decltype(sizeof(int)) size_t;
 //  typedef decltype(nullptr) nullptr_t;
@@ -51,7 +50,7 @@ namespace fc {
   template<typename T>
   const T& min( const T& a, const T& b ) { return a < b ? a: b; }
 
-  constexpr size_t const_strlen(const char* str) {
+  static size_t const_strlen(const char* str) {
      int i = 0;
      while(*(str+i) != '\0')
         i++;

@@ -48,7 +48,7 @@ namespace fc { namespace crypto {
 
          auto data_str = base58str.substr(pivot + 1);
          FC_ASSERT(!data_str.empty(), "Public Key has no data: ${str}", ("str", base58str));
-         return base58_str_parser<public_key::storage_type, config::public_key_prefix>::apply(data_str);
+         return base58_str_parser<public_key::storage_type>::apply(data_str);
       }
    }
 
@@ -70,7 +70,7 @@ namespace fc { namespace crypto {
 
    public_key::operator std::string() const
    {
-      auto data_str = _storage.visit(base58str_visitor<storage_type, config::public_key_prefix, 0>());
+      auto data_str = _storage.visit(base58str_visitor<storage_type, 0>());
 
       auto which = _storage.which();
       if (which == 0) {
