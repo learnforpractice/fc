@@ -6,6 +6,11 @@
 #include <fc/exception/exception.hpp>
 #include <fc/crypto/city.hpp>
 
+#if defined(_MSC_VER)
+    #include <boost/multiprecision/cpp_int.hpp>
+    using namespace boost::multiprecision;
+#endif
+
 #ifdef _MSC_VER
   #pragma warning (push)
   #pragma warning (disable : 4244)
@@ -32,16 +37,20 @@ namespace fc
       uint128( uint64_t _h, uint64_t _l )
       :hi(_h),lo(_l){}
       uint128( const fc::bigint& bi );
-      explicit uint128( unsigned __int128 i ):hi( i >> 64 ), lo(i){ }
 
+#if !defined(_MSC_VER)
+      explicit uint128( unsigned __int128 i ):hi( i >> 64 ), lo(i){ }
+#endif
       operator std::string()const;
       operator fc::bigint()const;
 
+#if !defined(_MSC_VER)
       explicit operator unsigned __int128()const {
          unsigned __int128 result(hi);
          result <<= 64;
          return result | lo;
       }
+#endif
 
       bool     operator == ( const uint128& o )const{ return hi == o.hi && lo == o.lo;             }
       bool     operator != ( const uint128& o )const{ return hi != o.hi || lo != o.lo;             }
@@ -129,8 +138,11 @@ namespace fc
 
   void to_variant( const uint128& var,  variant& vo );
   void from_variant( const variant& var,  uint128& vo );
-//  void to_variant( const unsigned __int128& var,  variant& vo );
-//  void from_variant( const variant& var,  unsigned __int128& vo );
+
+#if !defined(_MSC_VER)
+  void to_variant( const unsigned __int128& var,  variant& vo );
+  void from_variant( const variant& var,  unsigned __int128& vo );
+#endif
 
   namespace raw
   {
