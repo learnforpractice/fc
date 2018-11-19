@@ -18,7 +18,10 @@ target_include_directories(secp256k1
 )
 
 target_compile_definitions(secp256k1 PRIVATE HAVE_CONFIG_H=1)
-target_compile_options(secp256k1 PRIVATE -fPIC)
+
+if (NOT APPLE AND NOT WIN32)
+    target_compile_options(secp256k1 PRIVATE -fPIC)
+endif(NOT APPLE AND NOT WIN32)
 
 target_link_libraries(secp256k1 ${MPIR_LIBRARY})
 add_dependencies(secp256k1 mpir)
