@@ -165,6 +165,7 @@ namespace fc
       enum_checkpoint_exception,
       enum_abi_exception,
       enum_abi_not_found_exception,
+      enum_wasm_file_not_found,
       enum_invalid_ricardian_clause_exception,
       enum_invalid_ricardian_action_exception,
       enum_invalid_type_inside_abi,
