@@ -29,6 +29,11 @@ namespace fc { namespace crypto {
       return str.size() > prefix_len && str.substr(0, prefix_len).compare(prefix) == 0;
    }
 
+   inline bool prefix_matches(const string& prefix, const std::string& str) {
+      auto prefix_len = prefix.size();
+      return str.size() > prefix_len && str.substr(0, prefix_len).compare(prefix) == 0;
+   }
+
    template<typename, const char * const *, int, typename ...>
    struct base58_str_parser_impl;
 

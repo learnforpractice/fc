@@ -3,7 +3,9 @@
 #include <fc/exception/exception.hpp>
 
 namespace fc { namespace crypto {
-
+   namespace config {
+      string public_key_legacy_prefix = "EOS";
+   }
    struct recovery_visitor : fc::visitor<public_key::storage_type> {
       recovery_visitor(const sha256& digest, bool check_canonical)
       :_digest(digest)
@@ -26,9 +28,9 @@ namespace fc { namespace crypto {
 
    static public_key::storage_type parse_base58(const std::string& base58str)
    {
-      constexpr auto legacy_prefix = config::public_key_legacy_prefix;
+      auto legacy_prefix = config::public_key_legacy_prefix;
       if(prefix_matches(legacy_prefix, base58str) && base58str.find('_') == std::string::npos ) {
-         auto sub_str = base58str.substr(const_strlen(legacy_prefix));
+         auto sub_str = base58str.substr(legacy_prefix.size());
          using default_type = typename public_key::storage_type::template type_at<0>;
          using data_type = default_type::data_type;
          using wrapper = checksummed_data<data_type>;
@@ -38,7 +40,7 @@ namespace fc { namespace crypto {
          FC_ASSERT(wrapper::calculate_checksum(wrapped.data) == wrapped.check);
          return public_key::storage_type(default_type(wrapped.data));
       } else {
-         constexpr auto prefix = config::public_key_base_prefix;
+         auto prefix = config::public_key_base_prefix;
 
          const auto pivot = base58str.find('_');
          FC_ASSERT(pivot != std::string::npos, "No delimiter in string, cannot determine data type: ${str}", ("str", base58str));
