@@ -29,17 +29,16 @@ namespace fc { namespace crypto {
    static public_key::storage_type parse_base58(const std::string& base58str)
    {
       auto legacy_prefix = config::public_key_legacy_prefix;
-      if((prefix_matches(legacy_prefix, base58str) || prefix_matches("EOS", base58str)) && base58str.find('_') == std::string::npos ) {
-         string sub_str;
+      if(base58str.find('_') == std::string::npos ) {
          if (base58str.substr(0, legacy_prefix.size()) == legacy_prefix) {
-            sub_str = base58str.substr(legacy_prefix.size());
          } else if (base58str.substr(0, 3) == "EOS") {
-            sub_str = base58str.substr(3);
+            legacy_prefix = "EOS";
+         } else if (base58str.substr(0, 4) == "UUOS") {
+            legacy_prefix = "UUOS";
          } else {
             FC_ASSERT(false, "public key prefix not match!");
          }
-//         auto sub_str = base58str.substr(const_strlen(legacy_prefix));
-         using default_type = typename public_key::storage_type::template type_at<0>;
+         auto sub_str = base58str.substr(legacy_prefix.size());         using default_type = typename public_key::storage_type::template type_at<0>;
          using data_type = default_type::data_type;
          using wrapper = checksummed_data<data_type>;
          auto bin = fc::from_base58(sub_str);
